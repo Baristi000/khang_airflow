@@ -6,7 +6,7 @@ import random
 import pandas as pd
 import json
 import pendulum
-import create_table as qr
+from create_table import *
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 # from airflow.models.connection import Connection
@@ -21,7 +21,7 @@ dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once'
 create_written_table = PostgresOperator(
     task_id='create_written_table',
     postgres_conn_id='pg_connection_1',
-    sql=qr.create_table_Country,
+    sql=create_table_Country,
     dag=dag
 )
 create_written_table
