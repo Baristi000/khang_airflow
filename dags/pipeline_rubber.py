@@ -6,7 +6,7 @@ import random
 import pandas as pd
 import json
 import pendulum
-from create_table import *
+from dags.create_table import *
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 # from airflow.models.connection import Connection
