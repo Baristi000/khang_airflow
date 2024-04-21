@@ -6,9 +6,7 @@ import random
 import pandas as pd
 import json
 import pendulum
-# import staging as stg
 import create_table as qr
-# import insertion as ins
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 # from airflow.models.connection import Connection
