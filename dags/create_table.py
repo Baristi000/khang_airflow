@@ -23,7 +23,7 @@ create_table_Address = """
 """
 
 
-create_table_Account = """"
+create_table_Account = """
     CREATE TABLE IF NOT EXISTS Account (
         AccountID SERIAL PRIMARY KEY,
         Username varchar(255),
