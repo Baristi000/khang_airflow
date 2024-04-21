@@ -15,15 +15,15 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 default_args = {
-    'start_date': pendulum.datetime(2024,4,20,tz='UTC'),
+    'start_date': pendulum.datetime(2024,4,21,tz='UTC'),
     'owner': 'airflow'
 }
-dag = DAG('rubber', default_args=default_args,schedule_interval='@once',catchup=False)
+dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once',catchup=False)
 
 create_written_table = PostgresOperator(
     task_id='create_written_table',
-    postgres_conn_id='postgres_connection',
-    sql=qr.create_table_written,
+    postgres_conn_id='pg_connection_1',
+    sql=qr.create_table_Country,
     dag=dag
 )
 create_written_table
