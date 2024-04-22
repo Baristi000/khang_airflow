@@ -169,17 +169,13 @@ create_table_Task = PostgresOperator(
     sql=create_table_Task,
     dag=dag
 )
-# insert_account = PostgresOperator(
-#     task_id='insert_account',
-#     sql="INSERT INTO NDS.account SELECT * FROM stage.account",
-#     postgres_conn_id='pg_connection_1',
-# )
-# insert_account
-# insert_account = PythonOperator(
-#     task_id='insert_account',
-#     python_callable=ins.insert_account,
-#     dag=dag
-# )
+insert_account = PostgresOperator(
+    task_id='insert_account',
+    sql="INSERT INTO NDS.account SELECT * FROM stage.account",
+    postgres_conn_id='pg_connection_1',
+)
+create_table_Task >> insert_account
+
 
 # create_written_table >>create_table_Region>>create_table_Address
 # create_table_Address>>create_table_Account>>create_table_UserInfo>>create_table_Field>>create_table_RubberTree>>create_table_RubberTreeInformation
