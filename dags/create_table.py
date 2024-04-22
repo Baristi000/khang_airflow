@@ -24,7 +24,7 @@ create_table_Address = """
 
 
 create_table_Account = """
-    CREATE TABLE IF NOT EXISTS Account (
+    CREATE TABLE IF NOT EXISTS NDS.Account (
         AccountID SERIAL PRIMARY KEY,
         Username varchar(255),
         Password varchar(255),

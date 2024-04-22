@@ -37,12 +37,12 @@ dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once'
 #     sql=create_table_Address,
 #     dag=dag
 # )
-# create_table_Account = PostgresOperator(
-#     task_id='create_table_Account',
-#     postgres_conn_id='pg_connection_1',
-#     sql=create_table_Account,
-#     dag=dag
-# )
+create_table_Account = PostgresOperator(
+    task_id='create_table_Account',
+    postgres_conn_id='pg_connection_1',
+    sql=create_table_Account,
+    dag=dag
+)
 # create_table_UserInfo = PostgresOperator(
 #     task_id='create_table_UserInfo',
 #     postgres_conn_id='pg_connection_1',
@@ -163,18 +163,19 @@ dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once'
 #     sql=create_table_ChargingStatus,
 #     dag=dag
 # )
-create_table_Task = PostgresOperator(
-    task_id='create_table_Task',
-    postgres_conn_id='pg_connection_1',
-    sql=create_table_Task,
-    dag=dag
-)
+# create_table_Task = PostgresOperator(
+#     task_id='create_table_Task',
+#     postgres_conn_id='pg_connection_1',
+#     sql=create_table_Task,
+#     dag=dag
+# )
+
 insert_account = PostgresOperator(
     task_id='insert_account',
     sql="INSERT INTO NDS.account SELECT * FROM stage.account",
     postgres_conn_id='pg_connection_1',
 )
-create_table_Task >> insert_account
+create_table_Account >> insert_account
 
 
 # create_written_table >>create_table_Region>>create_table_Address
