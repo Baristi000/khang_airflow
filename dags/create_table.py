@@ -1,12 +1,12 @@
 create_table_Country = """
-    CREATE TABLE IF NOT EXISTS Country (
+    CREATE TABLE IF NOT EXISTS "NDS".Country (
         CountryID SERIAL PRIMARY KEY,
         CountryName varchar(255)
     )
 """
 
 create_table_Region = """
-    CREATE TABLE IF NOT EXISTS Region (
+    CREATE TABLE IF NOT EXISTS "NDS".Region (
         RegionID SERIAL PRIMARY KEY,
         CountryID integer REFERENCES Country(CountryID),
         RegionName varchar(255)
@@ -14,7 +14,7 @@ create_table_Region = """
 """
 
 create_table_Address = """
-    CREATE TABLE IF NOT EXISTS Address (
+    CREATE TABLE IF NOT EXISTS "NDS".Address (
         AddressID SERIAL PRIMARY KEY,
         RegionID integer REFERENCES Region(RegionID),
         City varchar(255),
@@ -34,7 +34,7 @@ create_table_Account = """
 
 
 create_table_UserInfo = """
-    CREATE TABLE IF NOT EXISTS UserInfo (
+    CREATE TABLE IF NOT EXISTS "NDS".UserInfo (
         UserID SERIAL PRIMARY KEY,
         FirstName varchar(255),
         LastName varchar(255),
@@ -51,7 +51,7 @@ create_table_UserInfo = """
 
 
 create_table_Field = """
-    CREATE TABLE IF NOT EXISTS Field (
+    CREATE TABLE IF NOT EXISTS "NDS".Field (
         FieldID SERIAL PRIMARY KEY,
         RegionID integer REFERENCES Region(RegionID),
         FieldName varchar(255),
@@ -61,7 +61,7 @@ create_table_Field = """
 
 
 create_table_RubberTree = """
-    CREATE TABLE IF NOT EXISTS RubberTree (
+    CREATE TABLE IF NOT EXISTS "NDS".RubberTree (
         TreeID SERIAL PRIMARY KEY,
         FieldID integer REFERENCES Field(FieldID),
         Location Point
@@ -70,7 +70,7 @@ create_table_RubberTree = """
 
 
 create_table_RubberTreeInformation = """
-    CREATE TABLE IF NOT EXISTS RubberTreeInformation (
+    CREATE TABLE IF NOT EXISTS "NDS".RubberTreeInformation (
         TreeInfoID SERIAL PRIMARY KEY,
         TreeID integer REFERENCES RubberTree(TreeID),
         TopHeight numeric(100,2),
@@ -82,7 +82,7 @@ create_table_RubberTreeInformation = """
 """
 
 create_table_Plan = """
-    CREATE TABLE IF NOT EXISTS Plan (
+    CREATE TABLE IF NOT EXISTS "NDS".Plan (
         PlanID SERIAL PRIMARY KEY,
         Name varchar(255),
         Description varchar(255),
@@ -91,35 +91,35 @@ create_table_Plan = """
 """
 
 create_table_PlanDetail = """
-    CREATE TABLE IF NOT EXISTS PlanDetail (
+    CREATE TABLE IF NOT EXISTS "NDS".PlanDetail (
         FieldID integer REFERENCES Field(fieldID),
         PlanID integer REFERENCES Plan(planID)
     )
 """
 
 create_table_Lidar = """
-    CREATE TABLE IF NOT EXISTS Lidar (
+    CREATE TABLE IF NOT EXISTS "NDS".Lidar (
         LidarID SERIAL PRIMARY KEY,
         Model varchar(255)
     )
 """
 
 create_table_Camera = """
-    CREATE TABLE IF NOT EXISTS Camera (
+    CREATE TABLE IF NOT EXISTS "NDS".Camera (
         CameraID SERIAL PRIMARY KEY,
         Model varchar(255)
     )
 """
 
 create_table_Radar = """
-    CREATE TABLE IF NOT EXISTS Radar (
+    CREATE TABLE IF NOT EXISTS "NDS".Radar (
         RadarID SERIAL PRIMARY KEY,
         Model varchar(255)
     )
 """
 
 create_table_SensorControlSystem = """
-    CREATE TABLE IF NOT EXISTS SensorControlSystem (
+    CREATE TABLE IF NOT EXISTS "NDS".SensorControlSystem (
         ScsID SERIAL PRIMARY KEY,
         LidarID integer REFERENCES Lidar(LidarID),
         CameraID integer REFERENCES Camera(CameraID),
@@ -129,7 +129,7 @@ create_table_SensorControlSystem = """
 
 
 create_table_Robot = """
-    CREATE TABLE IF NOT EXISTS Robot (
+    CREATE TABLE IF NOT EXISTS "NDS".Robot (
         RobotID SERIAL PRIMARY KEY,
         TypeRobot varchar(255),
         Model varchar(255),
@@ -139,7 +139,7 @@ create_table_Robot = """
 
 
 create_table_Energy = """
-    CREATE TABLE IF NOT EXISTS Energy (
+    CREATE TABLE IF NOT EXISTS "NDS".Energy (
         EnergyID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES Robot(RobotID),
         RemainingTime interval,
@@ -148,7 +148,7 @@ create_table_Energy = """
 """
 
 create_table_RobotTapping = """
-    CREATE TABLE IF NOT EXISTS RobotTapping (
+    CREATE TABLE IF NOT EXISTS "NDS".RobotTapping (
         RobotTappingID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES Robot(RobotID),
         TreeID integer references RubberTree(TreeID),
@@ -159,7 +159,7 @@ create_table_RobotTapping = """
 """
 
 create_table_Blade = """
-    CREATE TABLE IF NOT EXISTS Blade (
+    CREATE TABLE IF NOT EXISTS "NDS".Blade (
         BladeID SERIAL PRIMARY KEY,
         RobotTappingID integer REFERENCES RobotTapping(RobotTappingID),
         TappingStatus varchar(255),
@@ -171,7 +171,7 @@ create_table_Blade = """
 
 
 create_table_Environment = """
-    CREATE TABLE IF NOT EXISTS Environment (
+    CREATE TABLE IF NOT EXISTS "NDS".Environment (
         EnvironmentID SERIAL PRIMARY KEY,
         RobotTappingID integer REFERENCES RobotTapping(RobotTappingID),
         WindDirection varchar(255),
@@ -184,7 +184,7 @@ create_table_Environment = """
 """
 
 create_table_Drone = """
-    CREATE TABLE IF NOT EXISTS Drone (
+    CREATE TABLE IF NOT EXISTS "NDS".Drone (
         DroneID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES Robot(RobotID),
         ScsID integer REFERENCES SensorControlSystem(ScsID)
@@ -192,7 +192,7 @@ create_table_Drone = """
 """
 
 create_table_DroneInformation = """
-    CREATE TABLE IF NOT EXISTS DroneInformation (
+    CREATE TABLE IF NOT EXISTS "NDS".DroneInformation (
         DroneInfoID SERIAL PRIMARY KEY,
         DroneID integer REFERENCES Drone(DroneID),
         Direction varchar(255),
@@ -203,7 +203,7 @@ create_table_DroneInformation = """
 """
 
 create_table_DroneImage = """
-    CREATE TABLE IF NOT EXISTS DroneImage (
+    CREATE TABLE IF NOT EXISTS "NDS".DroneImage (
         DroneImageID SERIAL PRIMARY KEY,
         DroneID integer REFERENCES Drone(DroneID),
         TreeID integer REFERENCES RubberTree(TreeID),
@@ -213,7 +213,7 @@ create_table_DroneImage = """
 
 
 create_table_ChargingStation = """
-    CREATE TABLE IF NOT EXISTS ChargingStation (
+    CREATE TABLE IF NOT EXISTS "NDS".ChargingStation (
         ChargingStationID SERIAL PRIMARY KEY,
         Location point,
         MaxRobotNumber integer,
@@ -224,7 +224,7 @@ create_table_ChargingStation = """
 
 
 create_table_ChargingStatus = """
-    CREATE TABLE IF NOT EXISTS ChargingStatus (
+    CREATE TABLE IF NOT EXISTS "NDS".ChargingStatus (
         ChargingStatusID SERIAL PRIMARY KEY,
         DroneID integer REFERENCES Robot(RobotID),
         ChargingStationID integer REFERENCES ChargingStation(ChargingStationID),
@@ -235,7 +235,7 @@ create_table_ChargingStatus = """
 
 
 create_table_Task = """
-    CREATE TABLE IF NOT EXISTS Task (
+    CREATE TABLE IF NOT EXISTS "NDS".Task (
         TaskID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES Robot(RobotID),
         PlanID integer REFERENCES Plan(PlanID),
