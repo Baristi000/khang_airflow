@@ -172,7 +172,7 @@ create_table_Account = PostgresOperator(
 
 insert_account = PostgresOperator(
     task_id='insert_account',
-    sql='INSERT INTO "NDS".account SELECT * FROM "stage".account',
+    sql='INSERT INTO "NDS".account SELECT * FROM "Stage".account',
     postgres_conn_id='pg_connection_1',
 )
 create_table_Account >> insert_account
