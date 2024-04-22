@@ -19,12 +19,12 @@ default_args = {
 }
 dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once',catchup=False)
 
-# create_written_table = PostgresOperator(
-#     task_id='create_table_Country',
-#     postgres_conn_id='pg_connection_1',
-#     sql=create_table_Country,
-#     dag=dag
-# )
+create_written_table = PostgresOperator(
+    task_id='create_table_Country',
+    postgres_conn_id='pg_connection_1',
+    sql=create_table_Country,
+    dag=dag
+)
 # create_table_Region = PostgresOperator(
 #     task_id='create_table_Region',
 #     postgres_conn_id='pg_connection_1',
@@ -183,7 +183,7 @@ insert_Country = PostgresOperator(
 )
 # create_table_Account >> insert_account
 
-insert_Country
+create_written_table >> insert_Country
 
 # create_written_table >>create_table_Region>>create_table_Address
 # create_table_Address>>create_table_Account>>create_table_UserInfo>>create_table_Field>>create_table_RubberTree>>create_table_RubberTreeInformation
