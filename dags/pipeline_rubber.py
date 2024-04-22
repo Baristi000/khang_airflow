@@ -175,7 +175,7 @@ insert_account = PostgresOperator(
     sql="INSERT INTO 'NDS'.account SELECT * FROM 'stage'.account",
     postgres_conn_id='pg_connection_1',
 )
-create_table_Account >> insert_account
+# create_table_Account >> insert_account
 
 
 # create_written_table >>create_table_Region>>create_table_Address
