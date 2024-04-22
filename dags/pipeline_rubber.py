@@ -43,6 +43,7 @@ create_written_table = PostgresOperator(
 #     sql=create_table_Account,
 #     dag=dag
 # )
+
 # create_table_UserInfo = PostgresOperator(
 #     task_id='create_table_UserInfo',
 #     postgres_conn_id='pg_connection_1',
@@ -170,20 +171,24 @@ create_written_table = PostgresOperator(
 #     dag=dag
 # )
 
+
+# insert_Country = PostgresOperator(
+#     task_id='insert_Country',
+#     sql='INSERT INTO "NDS".Country SELECT * FROM "Stage".Country',
+#     postgres_conn_id='pg_connection_1',
+# )
+
+insert_region = PostgresOperator(
+    task_id='insert_region',
+    sql='INSERT INTO "NDS".region SELECT * FROM "Stage".region',
+    postgres_conn_id='pg_connection_1',
+)
 # insert_account = PostgresOperator(
 #     task_id='insert_account',
 #     sql='INSERT INTO "NDS".account SELECT * FROM "Stage".account',
 #     postgres_conn_id='pg_connection_1',
 # )
-
-insert_Country = PostgresOperator(
-    task_id='insert_Country',
-    sql='INSERT INTO "NDS".Country SELECT * FROM "Stage".Country',
-    postgres_conn_id='pg_connection_1',
-)
-# create_table_Account >> insert_account
-
-create_written_table >> insert_Country
+create_written_table >> insert_region
 
 # create_written_table >>create_table_Region>>create_table_Address
 # create_table_Address>>create_table_Account>>create_table_UserInfo>>create_table_Field>>create_table_RubberTree>>create_table_RubberTreeInformation
