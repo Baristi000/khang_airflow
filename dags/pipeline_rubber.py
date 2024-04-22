@@ -163,18 +163,18 @@ dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once'
 #     sql=create_table_ChargingStatus,
 #     dag=dag
 # )
-# create_table_Task = PostgresOperator(
-#     task_id='create_table_Task',
-#     postgres_conn_id='pg_connection_1',
-#     sql=create_table_Task,
-#     dag=dag
-# )
-insert_account = PostgresOperator(
-    task_id='insert_account',
-    sql="INSERT INTO NDS.account SELECT * FROM stage.account",
+create_table_Task = PostgresOperator(
+    task_id='create_table_Task',
     postgres_conn_id='pg_connection_1',
+    sql=create_table_Task,
+    dag=dag
 )
-insert_account
+# insert_account = PostgresOperator(
+#     task_id='insert_account',
+#     sql="INSERT INTO NDS.account SELECT * FROM stage.account",
+#     postgres_conn_id='pg_connection_1',
+# )
+# insert_account
 # insert_account = PythonOperator(
 #     task_id='insert_account',
 #     python_callable=ins.insert_account,
