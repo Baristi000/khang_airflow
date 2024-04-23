@@ -12,7 +12,7 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 default_args = {
-    'start_date': pendulum.datetime(2024,4,21,tz='UTC'),
+    'start_date': pendulum.datetime(2024,4,24,tz='UTC'),
     'owner': 'airflow'
 }
 dag = DAG('Create_Table_Schema', default_args=default_args,schedule_interval='@once',catchup=False)
