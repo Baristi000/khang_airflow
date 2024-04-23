@@ -200,7 +200,7 @@ sourceToStage_country = PostgresOperator(
 
                 INSERT INTO "Stage".country 
                 SELECT * FROM "Source".country 
-                where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset1 and UpdateDate < Cset1));
+                where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset1 and UpdateDate < Cset1);
             END $$;
             ''',
     postgres_conn_id='pg_connection_1',
