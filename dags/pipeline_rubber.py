@@ -6,7 +6,8 @@ import random
 import pandas as pd
 import json
 import pendulum
-from dags.create_table import *
+# from dags.create_table import *
+import dags.create_table as qr
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 # from airflow.models.connection import Connection
@@ -22,7 +23,7 @@ dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once'
 create_written_table = PostgresOperator(
     task_id='create_table_Country',
     postgres_conn_id='pg_connection_1',
-    sql=create_table_Country,
+    sql=qr.create_table_Country,
     dag=dag
 )
 # create_table_Region = PostgresOperator(
@@ -213,38 +214,37 @@ create_written_table = PostgresOperator(
 # )
 # truncateTableAndSetCet_country >> sourceToStage_country >> setLset_country
 
-truncateTableAndSetCet_Region = PostgresOperator(
-    task_id='truncateTableAndSetCet_Region',
-    sql=''' TRUNCATE table "Stage".Region;
+# truncateTableAndSetCet_Region = PostgresOperator(
+#     task_id='truncateTableAndSetCet_Region',
+#     sql=''' TRUNCATE table "Stage".Region;
 
-            UPDATE "Metadata".Data_Flow 
-            set Cet = now() where Name = 'Region' ''',
-    postgres_conn_id='pg_connection_1',
-)
-sourceToStage_Region = PostgresOperator(
-    task_id='sourceToStage_Region',
-    sql=''' DO $$
-            DECLARE 
-                Lset1 timestamp; 
-                Cet1 timestamp;
-            BEGIN
-                SELECT Lset, Cet INTO Lset1, Cet1 from "Metadata".data_flow where name = 'Region';
+#             UPDATE "Metadata".Data_Flow 
+#             set Cet = now() where Name = 'Region' ''',
+#     postgres_conn_id='pg_connection_1',
+# )
+# sourceToStage_Region = PostgresOperator(
+#     task_id='sourceToStage_Region',
+#     sql=''' DO $$
+#             DECLARE 
+#                 Lset1 timestamp; 
+#                 Cet1 timestamp;
+#             BEGIN
+#                 SELECT Lset, Cet INTO Lset1, Cet1 from "Metadata".data_flow where name = 'Region';
 
-                INSERT INTO "Stage".Region 
-                SELECT * FROM "Source".Region 
-                where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset1 and UpdateDate < Cet1);
-            END $$;
-            ''',
-    postgres_conn_id='pg_connection_1',
-)
-setLset_Region = PostgresOperator(
-    task_id='setLset_Region',
-    sql='''UPDATE "Metadata".Data_Flow 
-            set Lset = now() where Name = 'Region' ''',
-    postgres_conn_id='pg_connection_1',
-)
-
-create_written_table >> truncateTableAndSetCet_Region >> sourceToStage_Region >> setLset_Region
+#                 INSERT INTO "Stage".Region 
+#                 SELECT * FROM "Source".Region 
+#                 where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset1 and UpdateDate < Cet1);
+#             END $$;
+#             ''',
+#     postgres_conn_id='pg_connection_1',
+# )
+# setLset_Region = PostgresOperator(
+#     task_id='setLset_Region',
+#     sql='''UPDATE "Metadata".Data_Flow 
+#             set Lset = now() where Name = 'Region' ''',
+#     postgres_conn_id='pg_connection_1',
+# )
+# create_written_table >> truncateTableAndSetCet_Region >> sourceToStage_Region >> setLset_Region
 
 # create_written_table >>create_table_Region>>create_table_Address
 # create_table_Address>>create_table_Account>>create_table_UserInfo>>create_table_Field>>create_table_RubberTree>>create_table_RubberTreeInformation
