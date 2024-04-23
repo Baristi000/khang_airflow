@@ -6,12 +6,9 @@ import random
 import pandas as pd
 import json
 import pendulum
-from dags.sql.create_table import *
-from dags.sql.SourceToStage import *
-# import dags.create_table as qr
+from dags.sql.StageToNDS import *
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-# from airflow.models.connection import Connection
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 default_args = {
@@ -20,27 +17,130 @@ default_args = {
 }
 dag = DAG('StageToNDS_Rubber', default_args=default_args,schedule_interval='@once',catchup=False)
 
-
-create_table_Country = PostgresOperator(
-    task_id='create_table_Country',
-    postgres_conn_id='pg_connection_1',
-    sql=create_table_Country,
-    dag=dag
-)
 StageToNDS_Country = PostgresOperator(
     task_id='StageToNDS_Country',
-    sql= ''' 
-        MERGE INTO "NDS".country AS t1
-        USING "Stage".country AS t2
-        ON (t1.CountryID = t2.CountryID)
-        WHEN MATCHED THEN
-            UPDATE SET
-                CountryName = t2.CountryName,
-                UpdateDate = t2.UpdateDate
-        WHEN NOT MATCHED THEN
-            INSERT (CountryID, CountryName, CreatedDate, UpdateDate)
-            VALUES (t2.CountryID, t2.CountryName, t2.CreatedDate, t2.UpdateDate);   
-    ''',
+    sql= StageToNDS_Country,
     postgres_conn_id='pg_connection_1',
 )
-create_table_Country >> StageToNDS_Country
+StageToNDS_Region = PostgresOperator(
+    task_id='StageToNDS_Region',
+    sql= StageToNDS_Region,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Address = PostgresOperator(
+    task_id='StageToNDS_Address',
+    sql= StageToNDS_Address,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Account = PostgresOperator(
+    task_id='StageToNDS_Account',
+    sql= StageToNDS_Account,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_UserInfo = PostgresOperator(
+    task_id='StageToNDS_UserInfo',
+    sql= StageToNDS_UserInfo,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Field = PostgresOperator(
+    task_id='StageToNDS_Field',
+    sql= StageToNDS_Field,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_RubberTree = PostgresOperator(
+    task_id='StageToNDS_RubberTree',
+    sql= StageToNDS_RubberTree,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_RubberTreeInformation = PostgresOperator(
+    task_id='StageToNDS_RubberTreeInformation',
+    sql= StageToNDS_RubberTreeInformation,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Plan = PostgresOperator(
+    task_id='StageToNDS_Plan',
+    sql= StageToNDS_Plan,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_PlanDetail = PostgresOperator(
+    task_id='StageToNDS_PlanDetail',
+    sql= StageToNDS_PlanDetail,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Lidar = PostgresOperator(
+    task_id='StageToNDS_Lidar',
+    sql= StageToNDS_Lidar,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Camera = PostgresOperator(
+    task_id='StageToNDS_Camera',
+    sql= StageToNDS_Camera,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Radar = PostgresOperator(
+    task_id='StageToNDS_Radar',
+    sql= StageToNDS_Radar,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_SensorControlSystem = PostgresOperator(
+    task_id='StageToNDS_SensorControlSystem',
+    sql= StageToNDS_SensorControlSystem,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Robot = PostgresOperator(
+    task_id='StageToNDS_Robot',
+    sql= StageToNDS_Robot,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Energy = PostgresOperator(
+    task_id='StageToNDS_Energy',
+    sql= StageToNDS_Energy,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_RobotTapping = PostgresOperator(
+    task_id='StageToNDS_RobotTapping',
+    sql= StageToNDS_RobotTapping,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Blade = PostgresOperator(
+    task_id='StageToNDS_Blade',
+    sql= StageToNDS_Blade,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Environment = PostgresOperator(
+    task_id='StageToNDS_Environment',
+    sql= StageToNDS_Environment,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Drone = PostgresOperator(
+    task_id='StageToNDS_Drone',
+    sql= StageToNDS_Drone,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_DroneInformation = PostgresOperator(
+    task_id='StageToNDS_DroneInformation',
+    sql= StageToNDS_DroneInformation,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_DroneImage = PostgresOperator(
+    task_id='StageToNDS_DroneImage',
+    sql= StageToNDS_DroneImage,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_ChargingStation = PostgresOperator(
+    task_id='StageToNDS_ChargingStation',
+    sql= StageToNDS_ChargingStation,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_ChargingStatus = PostgresOperator(
+    task_id='StageToNDS_ChargingStatus',
+    sql= StageToNDS_ChargingStatus,
+    postgres_conn_id='pg_connection_1',
+)
+StageToNDS_Task = PostgresOperator(
+    task_id='StageToNDS_Task',
+    sql= StageToNDS_Task,
+    postgres_conn_id='pg_connection_1',
+)
+
+StageToNDS_Country
