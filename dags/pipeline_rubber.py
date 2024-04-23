@@ -170,28 +170,50 @@ create_written_table = PostgresOperator(
 #     sql=create_table_Task,
 #     dag=dag
 # )
-
-
 # insert_Country = PostgresOperator(
 #     task_id='insert_Country',
 #     sql='INSERT INTO "NDS".Country SELECT * FROM "Stage".Country',
 #     postgres_conn_id='pg_connection_1',
 # )
-
-insert_region = PostgresOperator(
-    task_id='insert_region',
-    sql='INSERT INTO "NDS".region SELECT * FROM "Stage".region',
-    postgres_conn_id='pg_connection_1',
-)
 # insert_account = PostgresOperator(
 #     task_id='insert_account',
 #     sql='INSERT INTO "NDS".account SELECT * FROM "Stage".account',
 #     postgres_conn_id='pg_connection_1',
 # )
-create_written_table >> insert_region
+truncateTable_country = PostgresOperator(
+    task_id='truncateTable_country',
+    sql=''' truncate table "Stage".country ''',
+    postgres_conn_id='pg_connection_1',
+)
+setCet_country = PostgresOperator(
+    task_id='setCet_country',
+    sql='''update "Metadata".Data_Flow 
+            set Cet = now() where Name = 'country' ''',
+    postgres_conn_id='pg_connection_1',
+)
+sourceToStage_country = PostgresOperator(
+    task_id='sourceToStage_country',
+    sql=''' INSERT INTO "NDS".region 
+            SELECT * FROM "Stage".region 
+            where (CreatedDate > Lset and CreatedDate <Cset) or (UpdateDate > Lset and UpdateDate <Cset) ''',
+    postgres_conn_id='pg_connection_1',
+)
+setLset_country = PostgresOperator(
+    task_id='setLset_country',
+    sql='''update "Metadata".Data_Flow 
+            set Lset = now() where Name = 'country' ''',
+    postgres_conn_id='pg_connection_1',
+)
+
+create_written_table >> truncateTable_country >> setCet_country >> sourceToStage_country >> setLset_country
 
 # create_written_table >>create_table_Region>>create_table_Address
 # create_table_Address>>create_table_Account>>create_table_UserInfo>>create_table_Field>>create_table_RubberTree>>create_table_RubberTreeInformation
 # create_table_RubberTreeInformation>>create_table_Plan>>create_table_PlanDetail>>create_table_Lidar>>create_table_Camera>>create_table_Radar>>create_table_SensorControlSystem
 # create_table_SensorControlSystem>> create_table_Robot>>create_table_Energy>>create_table_RobotTapping>>create_table_Blade>>create_table_Environment>>create_table_Drone
 # create_table_Drone>> create_table_DroneInformation>>create_table_DroneImage>>create_table_ChargingStation>>create_table_ChargingStatus>>create_table_Task >> insert_account
+
+
+
+
+
