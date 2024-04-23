@@ -182,27 +182,33 @@ create_written_table = PostgresOperator(
 # )
 truncateTable_country = PostgresOperator(
     task_id='truncateTable_country',
-    sql=''' truncate table "Stage".Country;
-            update "Metadata".Data_Flow 
-            set Cet = now() where Name = 'country' ''',
+    sql=''' TRUNCATE table "Stage".Country;
+
+            UPDATE "Metadata".Data_Flow 
+            set Cet = now() where Name = 'Country' ''',
     postgres_conn_id='pg_connection_1',
 )
-# setCet_country = PostgresOperator(
-#     task_id='setCet_country',
-#     sql=''' ''',
-#     postgres_conn_id='pg_connection_1',
-# )
+
 sourceToStage_country = PostgresOperator(
     task_id='sourceToStage_country',
-    sql=''' INSERT INTO "Stage".country 
-            SELECT * FROM "Source".country join "Metadata".data_flow 
-            where ("Metadata".data_flow.Name = 'Country') and ((CreatedDate > Lset and CreatedDate <Cset) or (UpdateDate > Lset and UpdateDate <Cset)) ''',
+    sql=''' DO $$
+            DECLARE 
+                Lset1 timestamp;
+                Cet1 timestamp;
+            BEGIN
+                SELECT Lset, Cet INTO Lset1, Cet1 from "Metadata".data_flow where name = 'Country';
+
+                INSERT INTO "Stage".country 
+                SELECT * FROM "Source".country 
+                where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset and UpdateDate < Cset))
+            END $$;
+            ''',
     postgres_conn_id='pg_connection_1',
 )
 setLset_country = PostgresOperator(
     task_id='setLset_country',
-    sql='''update "Metadata".Data_Flow 
-            set Lset = now() where Name = 'country' ''',
+    sql='''UPDATE "Metadata".Data_Flow 
+            set Lset = now() where Name = 'Country' ''',
     postgres_conn_id='pg_connection_1',
 )
 
