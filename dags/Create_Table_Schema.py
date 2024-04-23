@@ -168,7 +168,7 @@ create_table_Task = PostgresOperator(
     dag=dag
 )
 
-[create_table_Country >>  create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation] >> [
+[create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation] >> [
     create_table_Region, create_table_SensorControlSystem, create_table_ChargingStatus, create_table_Task, create_table_Energy] >> [
     create_table_Address, create_table_Field, create_table_Energy, create_table_Drone] >> [
     create_table_UserInfo, create_table_RubberTree, create_table_PlanDetail, create_table_DroneInformation]>> [
