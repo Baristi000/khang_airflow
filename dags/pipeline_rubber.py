@@ -6,8 +6,9 @@ import random
 import pandas as pd
 import json
 import pendulum
-# from dags.create_table import *
-import dags.create_table as qr
+from dags.create_table import *
+from dags.SourceToStage import *
+# import dags.create_table as qr
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 # from airflow.models.connection import Connection
@@ -23,9 +24,26 @@ dag = DAG('pipeline_rubber', default_args=default_args,schedule_interval='@once'
 create_written_table = PostgresOperator(
     task_id='create_table_Country',
     postgres_conn_id='pg_connection_1',
-    sql=qr.create_table_Country,
+    sql=create_table_Country,
     dag=dag
 )
+StageToNDS_Country = PostgresOperator(
+    task_id='StageToNDS_Country',
+    sql= ''' 
+        MERGE INTO "NDS".country AS t1
+        USING "Stage".country AS t2
+        ON (t1.CountryID = t2.CountryID)
+        WHEN MATCHED THEN
+            UPDATE SET
+                CountryName = t2.CountryName,
+                UpdateDate = t2.UpdateDate
+        WHEN NOT MATCHED THEN
+            INSERT (CountryID, CountryName, CreatedDate, UpdateDate)
+            VALUES (t2.CountryID, t2.CountryName, t2.CreatedDate, t2.UpdateDate);   
+    ''',
+    postgres_conn_id='pg_connection_1',
+)
+create_written_table >> StageToNDS_Country
 # create_table_Region = PostgresOperator(
 #     task_id='create_table_Region',
 #     postgres_conn_id='pg_connection_1',
@@ -182,68 +200,55 @@ create_written_table = PostgresOperator(
 #     postgres_conn_id='pg_connection_1',
 # )
 
-# truncateTableAndSetCet_country = PostgresOperator(
-#     task_id='truncateTableAndSetCet_country',
-#     sql=''' TRUNCATE table "Stage".Country;
-
-#             UPDATE "Metadata".Data_Flow 
-#             set Cet = now() where Name = 'Country' ''',
+# truncateTableAndSetCet_Country = PostgresOperator(
+#     task_id='truncateTableAndSetCet_Country',
+#     sql= truncateTableAndSetCet_Country,
 #     postgres_conn_id='pg_connection_1',
 # )
-# sourceToStage_country = PostgresOperator(
-#     task_id='sourceToStage_country',
-#     sql=''' DO $$
-#             DECLARE 
-#                 Lset1 timestamp; 
-#                 Cet1 timestamp;
-#             BEGIN
-#                 SELECT Lset, Cet INTO Lset1, Cet1 from "Metadata".data_flow where name = 'Country';
-
-#                 INSERT INTO "Stage".country 
-#                 SELECT * FROM "Source".country 
-#                 where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset1 and UpdateDate < Cet1);
-#             END $$;
-#             ''',
+# sourceToStage_Country = PostgresOperator(
+#     task_id='sourceToStage_Country',
+#     sql= sourceToStage_Country,
 #     postgres_conn_id='pg_connection_1',
 # )
-# setLset_country = PostgresOperator(
-#     task_id='setLset_country',
-#     sql='''UPDATE "Metadata".Data_Flow 
-#             set Lset = now() where Name = 'Country' ''',
+# setLset_Country = PostgresOperator(
+#     task_id='setLset_Country',
+#     sql = setLset_Country,
 #     postgres_conn_id='pg_connection_1',
 # )
-# truncateTableAndSetCet_country >> sourceToStage_country >> setLset_country
 
 # truncateTableAndSetCet_Region = PostgresOperator(
 #     task_id='truncateTableAndSetCet_Region',
-#     sql=''' TRUNCATE table "Stage".Region;
-
-#             UPDATE "Metadata".Data_Flow 
-#             set Cet = now() where Name = 'Region' ''',
+#     sql= truncateTableAndSetCet_Region,
 #     postgres_conn_id='pg_connection_1',
 # )
 # sourceToStage_Region = PostgresOperator(
 #     task_id='sourceToStage_Region',
-#     sql=''' DO $$
-#             DECLARE 
-#                 Lset1 timestamp; 
-#                 Cet1 timestamp;
-#             BEGIN
-#                 SELECT Lset, Cet INTO Lset1, Cet1 from "Metadata".data_flow where name = 'Region';
-
-#                 INSERT INTO "Stage".Region 
-#                 SELECT * FROM "Source".Region 
-#                 where (CreatedDate > Lset1 and CreatedDate < Cet1) or (UpdateDate > Lset1 and UpdateDate < Cet1);
-#             END $$;
-#             ''',
+#     sql= sourceToStage_Region,
 #     postgres_conn_id='pg_connection_1',
 # )
 # setLset_Region = PostgresOperator(
 #     task_id='setLset_Region',
-#     sql='''UPDATE "Metadata".Data_Flow 
-#             set Lset = now() where Name = 'Region' ''',
+#     sql = setLset_Region,
 #     postgres_conn_id='pg_connection_1',
 # )
+
+# truncateTableAndSetCet_Address = PostgresOperator(
+#     task_id='truncateTableAndSetCet_Address',
+#     sql= truncateTableAndSetCet_Address,
+#     postgres_conn_id='pg_connection_1',
+# )
+# sourceToStage_Address = PostgresOperator(
+#     task_id='sourceToStage_Address',
+#     sql= sourceToStage_Address,
+#     postgres_conn_id='pg_connection_1',
+# )
+# setLset_Address = PostgresOperator(
+#     task_id='setLset_Address',
+#     sql = setLset_Address,
+#     postgres_conn_id='pg_connection_1',
+# )
+
+# truncateTableAndSetCet_country >> sourceToStage_country >> setLset_country
 # create_written_table >> truncateTableAndSetCet_Region >> sourceToStage_Region >> setLset_Region
 
 # create_written_table >>create_table_Region>>create_table_Address
@@ -251,6 +256,4 @@ create_written_table = PostgresOperator(
 # create_table_RubberTreeInformation>>create_table_Plan>>create_table_PlanDetail>>create_table_Lidar>>create_table_Camera>>create_table_Radar>>create_table_SensorControlSystem
 # create_table_SensorControlSystem>> create_table_Robot>>create_table_Energy>>create_table_RobotTapping>>create_table_Blade>>create_table_Environment>>create_table_Drone
 # create_table_Drone>> create_table_DroneInformation>>create_table_DroneImage>>create_table_ChargingStation>>create_table_ChargingStatus>>create_table_Task >> insert_account
-
-
 
