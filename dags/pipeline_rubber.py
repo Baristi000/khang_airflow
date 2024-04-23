@@ -182,20 +182,21 @@ create_written_table = PostgresOperator(
 # )
 truncateTable_country = PostgresOperator(
     task_id='truncateTable_country',
-    sql=''' truncate table "Stage".country ''',
-    postgres_conn_id='pg_connection_1',
-)
-setCet_country = PostgresOperator(
-    task_id='setCet_country',
-    sql='''update "Metadata".Data_Flow 
+    sql=''' truncate table "Stage".Country;
+            update "Metadata".Data_Flow 
             set Cet = now() where Name = 'country' ''',
     postgres_conn_id='pg_connection_1',
 )
+# setCet_country = PostgresOperator(
+#     task_id='setCet_country',
+#     sql=''' ''',
+#     postgres_conn_id='pg_connection_1',
+# )
 sourceToStage_country = PostgresOperator(
     task_id='sourceToStage_country',
-    sql=''' INSERT INTO "NDS".region 
-            SELECT * FROM "Stage".region 
-            where (CreatedDate > Lset and CreatedDate <Cset) or (UpdateDate > Lset and UpdateDate <Cset) ''',
+    sql=''' INSERT INTO "Stage".country 
+            SELECT * FROM "Source".country join "Metadata".data_flow 
+            where ("Metadata".data_flow.Name = 'Country') and ((CreatedDate > Lset and CreatedDate <Cset) or (UpdateDate > Lset and UpdateDate <Cset)) ''',
     postgres_conn_id='pg_connection_1',
 )
 setLset_country = PostgresOperator(
@@ -205,7 +206,7 @@ setLset_country = PostgresOperator(
     postgres_conn_id='pg_connection_1',
 )
 
-create_written_table >> truncateTable_country >> setCet_country >> sourceToStage_country >> setLset_country
+create_written_table >> truncateTable_country >> sourceToStage_country >> setLset_country
 
 # create_written_table >>create_table_Region>>create_table_Address
 # create_table_Address>>create_table_Account>>create_table_UserInfo>>create_table_Field>>create_table_RubberTree>>create_table_RubberTreeInformation
