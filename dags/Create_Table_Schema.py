@@ -190,5 +190,4 @@ from airflow.models.baseoperator import chain_linear
 
 # create_table_Country >> [create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation]
 
-chain_linear([create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation], 
-             [create_table_Region, create_table_SensorControlSystem])
+chain_linear([create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation]) >> chain_linear([create_table_Region, create_table_SensorControlSystem])
