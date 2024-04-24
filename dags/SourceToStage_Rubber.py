@@ -36,7 +36,6 @@ setLset_Country = PostgresOperator(
     postgres_conn_id='pg_connection_1',
     dag=dag
 )
-# truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
 
 truncateTableAndSetCet_Region = PostgresOperator(
     task_id='truncateTableAndSetCet_Region',

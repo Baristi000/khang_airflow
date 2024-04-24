@@ -13,7 +13,8 @@ StageToNDS_Country = '''
 
 StageToNDS_Region = ''' 
     MERGE INTO "NDS".Region AS t1
-    USING "Stage".Region AS t2
+    USING (select * from "Stage".Region 
+	    where "Stage".Region.countryid in (select countryid from "NDS".Country)) AS t2
     ON (t1.RegionID = t2.RegionID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -27,7 +28,8 @@ StageToNDS_Region = '''
 
 StageToNDS_Address = ''' 
     MERGE INTO "NDS".Address AS t1
-    USING "Stage".Address AS t2
+    USING (select * from "Stage".Address 
+	    where "Stage".Address.RegionID in (select RegionID from "NDS".Region)) AS t2
     ON (t1.AddressID = t2.AddressID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -57,7 +59,9 @@ StageToNDS_Account = '''
 
 StageToNDS_UserInfo = ''' 
     MERGE INTO "NDS".UserInfo AS t1
-    USING "Stage".UserInfo AS t2
+    USING (select * from "Stage".UserInfo 
+	    where ("Stage".UserInfo.AddressID in (select AddressID from "NDS".Address))
+        and ("Stage".UserInfo.AccountID in (select AccountID from "NDS".Account)) ) AS t2
     ON (t1.UserID = t2.UserID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -77,7 +81,8 @@ StageToNDS_UserInfo = '''
 
 StageToNDS_Field = ''' 
     MERGE INTO "NDS".Field AS t1
-    USING "Stage".Field AS t2
+    USING (select * from "Stage".Field 
+	    where "Stage".Field.RegionID in (select RegionID from "NDS".Region)) AS t2
     ON (t1.FieldID = t2.FieldID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -92,7 +97,8 @@ StageToNDS_Field = '''
 
 StageToNDS_RubberTree = ''' 
     MERGE INTO "NDS".RubberTree AS t1
-    USING "Stage".RubberTree AS t2
+    USING (select * from "Stage".RubberTree 
+	    where "Stage".RubberTree.FieldID in (select FieldID from "NDS".Field)) AS t2
     ON (t1.TreeID = t2.TreeID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -106,7 +112,8 @@ StageToNDS_RubberTree = '''
 
 StageToNDS_RubberTreeInformation = ''' 
     MERGE INTO "NDS".TreeInfo AS t1
-    USING "Stage".TreeInfo AS t2
+    USING (select * from "Stage".TreeInfo 
+	    where "Stage".TreeInfo.TreeID in (select TreeID from "NDS".RubberTree)) AS t2
     ON (t1.TreeInfoID = t2.TreeInfoID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -139,7 +146,9 @@ StageToNDS_Plan = '''
 
 StageToNDS_PlanDetail = ''' 
     MERGE INTO "NDS".PlanDetail AS t1
-    USING "Stage".PlanDetail AS t2
+    USING (select * from "Stage".PlanDetail 
+	    where ("Stage".PlanDetail.fieldID in (select fieldID from "NDS".Field))
+        and ("Stage".PlanDetail.PlanID in (select PlanID from "NDS".Plan)) ) AS t2
     ON (t1.FieldID = t2.FieldID and t1.PlanID = t2.PlanID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -190,7 +199,10 @@ StageToNDS_Radar = '''
 
 StageToNDS_SensorControlSystem = ''' 
     MERGE INTO "NDS".SensorControlSystem AS t1
-    USING "Stage".SensorControlSystem AS t2
+    USING (select * from "Stage".SensorControlSystem 
+	    where ("Stage".SensorControlSystem.LidarID in (select LidarID from "NDS".Lidar))
+        and ("Stage".SensorControlSystem.CameraID in (select CameraID from "NDS".Camera))
+        and ("Stage".SensorControlSystem.RadarID in (select RadarID from "NDS".Radar)) ) AS t2
     ON (t1.ScsID = t2.ScsID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -220,7 +232,8 @@ StageToNDS_Robot = '''
 
 StageToNDS_Energy = ''' 
     MERGE INTO "NDS".Energy AS t1
-    USING "Stage".Energy AS t2
+    USING (select * from "Stage".Energy 
+	    where "Stage".Energy.RobotID in (select RobotID from "NDS".Robot)) AS t2
     ON (t1.EnergyID = t2.EnergyID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -235,7 +248,9 @@ StageToNDS_Energy = '''
 
 StageToNDS_RobotTapping = ''' 
     MERGE INTO "NDS".RobotTapping AS t1
-    USING "Stage".RobotTapping AS t2
+    USING (select * from "Stage".RobotTapping 
+	    where ("Stage".RobotTapping.RobotID in (select RobotID from "NDS".Robot))
+        and ("Stage".RobotTapping.TreeID in (select TreeID from "NDS".RubberTree)) ) AS t2
     ON (t1.RobotTappingID = t2.RobotTappingID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -252,7 +267,8 @@ StageToNDS_RobotTapping = '''
 
 StageToNDS_Blade = ''' 
     MERGE INTO "NDS".Blade AS t1
-    USING "Stage".Blade AS t2
+    USING (select * from "Stage".Blade 
+	    where "Stage".Blade.RobotTappingID in (select RobotTappingID from "NDS".RobotTapping)) AS t2
     ON (t1.BladeID = t2.BladeID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -269,7 +285,8 @@ StageToNDS_Blade = '''
 
 StageToNDS_Environment = ''' 
     MERGE INTO "NDS".Environment AS t1
-    USING "Stage".Environment AS t2
+    USING (select * from "Stage".Environment 
+	    where "Stage".Environment.RobotTappingID in (select RobotTappingID from "NDS".RobotTapping)) AS t2
     ON (t1.EnvironmentID = t2.EnvironmentID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -287,7 +304,9 @@ StageToNDS_Environment = '''
 
 StageToNDS_Drone = ''' 
     MERGE INTO "NDS".Drone AS t1
-    USING "Stage".Drone AS t2
+    USING (select * from "Stage".Drone 
+	    where ("Stage".Drone.RobotID in (select RobotID from "NDS".Robot))
+        and ("Stage".Drone.ScsID in (select ScsID from "NDS".SensorControlSystem)) ) AS t2
     ON (t1.DroneID = t2.DroneID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -301,7 +320,8 @@ StageToNDS_Drone = '''
 
 StageToNDS_DroneInformation = ''' 
     MERGE INTO "NDS".DroneInformation AS t1
-    USING "Stage".DroneInformation AS t2
+    USING (select * from "Stage".DroneInformation 
+	    where "Stage".DroneInformation.DroneID in (select DroneID from "NDS".Drone)) AS t2
     ON (t1.DroneInfoID = t2.DroneInfoID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -318,7 +338,9 @@ StageToNDS_DroneInformation = '''
 
 StageToNDS_DroneImage = ''' 
     MERGE INTO "NDS".DroneImage AS t1
-    USING "Stage".DroneImage AS t2
+    USING (select * from "Stage".DroneImage 
+	    where ("Stage".DroneImage.DroneID in (select DroneID from "NDS".Drone))
+        and ("Stage".DroneImage.TreeID in (select TreeID from "NDS".RubberTree)) ) AS t2
     ON (t1.DroneImageID = t2.DroneImageID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -349,7 +371,9 @@ StageToNDS_ChargingStation = '''
 
 StageToNDS_ChargingStatus = ''' 
     MERGE INTO "NDS".ChargingStatus AS t1
-    USING "Stage".ChargingStatus AS t2
+    USING (select * from "Stage".ChargingStatus 
+	    where ("Stage".ChargingStatus.RobotID in (select RobotID from "NDS".Robot))
+        and ("Stage".ChargingStatus.ChargingStationID in (select ChargingStationID from "NDS".RubberChargingStation)) ) AS t2
     ON (t1.ChargingStatusID = t2.ChargingStatusID)
     WHEN MATCHED THEN
         UPDATE SET
@@ -366,6 +390,9 @@ StageToNDS_ChargingStatus = '''
 StageToNDS_Task = ''' 
     MERGE INTO "NDS".Task AS t1
     USING "Stage".Task AS t2
+    USING (select * from "Stage".Task 
+	    where ("Stage".Task.RobotID in (select RobotID from "NDS".Robot))
+        and ("Stage".Task.PlanID in (select PlanID from "NDS".RubberPlan)) ) AS t2
     ON (t1.TaskID = t2.TaskID)
     WHEN MATCHED THEN
         UPDATE SET
