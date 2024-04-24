@@ -1,5 +1,4 @@
-# Tạo bảng Country
-create_table_Country = """
+create_table_NDS_Country = """
     CREATE TABLE "NDS".Country (
         CountryID SERIAL PRIMARY KEY,
         CountryName varchar(255),
@@ -8,8 +7,7 @@ create_table_Country = """
     );
 """
 
-# Tạo bảng Region
-create_table_Region = """
+create_table_NDS_Region = """
     CREATE TABLE "NDS".Region (
         RegionID SERIAL PRIMARY KEY,
         CountryID integer REFERENCES "NDS".Country(CountryID),
@@ -19,8 +17,7 @@ create_table_Region = """
     );
 """
 
-# Tạo bảng Address
-create_table_Address = """
+create_table_NDS_Address = """
     CREATE TABLE "NDS".Address (
         AddressID SERIAL PRIMARY KEY,
         RegionID integer REFERENCES "NDS".Region(RegionID),
@@ -31,8 +28,7 @@ create_table_Address = """
     );
 """
 
-# Tạo bảng Account
-create_table_Account = """
+create_table_NDS_Account = """
     CREATE TABLE "NDS".Account (
         AccountID SERIAL PRIMARY KEY,
         Username varchar(255),
@@ -43,8 +39,7 @@ create_table_Account = """
     );
 """
 
-# Tạo bảng UserInfo
-create_table_UserInfo = """
+create_table_NDS_UserInfo = """
     CREATE TABLE "NDS".UserInfo (
         UserID SERIAL PRIMARY KEY,
         FirstName varchar(255),
@@ -60,8 +55,7 @@ create_table_UserInfo = """
     );
 """
 
-# Tạo bảng Field
-create_table_Field = """
+create_table_NDS_Field = """
     CREATE TABLE "NDS".Field (
         FieldID SERIAL PRIMARY KEY,
         RegionID integer REFERENCES "NDS".Region(RegionID),
@@ -72,8 +66,7 @@ create_table_Field = """
     );
 """
 
-# Tạo bảng RubberTree
-create_table_RubberTree = """
+create_table_NDS_RubberTree = """
     CREATE TABLE "NDS".RubberTree (
         TreeID SERIAL PRIMARY KEY,
         FieldID integer REFERENCES "NDS".Field(FieldID),
@@ -83,8 +76,7 @@ create_table_RubberTree = """
     );
 """
 
-# Tạo bảng RubberTreeInformation
-create_table_RubberTreeInformation = """
+create_table_NDS_RubberTreeInformation = """
     CREATE TABLE "NDS".RubberTreeInformation (
         TreeInfoID SERIAL PRIMARY KEY,
         TreeID integer REFERENCES "NDS".RubberTree(TreeID),
@@ -98,8 +90,7 @@ create_table_RubberTreeInformation = """
     );
 """
 
-# Tạo bảng Plan
-create_table_Plan = """
+create_table_NDS_Plan = """
     CREATE TABLE "NDS".Plan (
         PlanID SERIAL PRIMARY KEY,
         Name varchar(255),
@@ -110,8 +101,7 @@ create_table_Plan = """
     );
 """
 
-# Tạo bảng PlanDetail
-create_table_PlanDetail = """
+create_table_NDS_PlanDetail = """
     CREATE TABLE "NDS".PlanDetail (
         FieldID integer REFERENCES "NDS".Field(fieldID),
         PlanID integer REFERENCES "NDS".Plan(planID),
@@ -121,8 +111,7 @@ create_table_PlanDetail = """
     );
 """
 
-# Tạo bảng Lidar
-create_table_Lidar = """
+create_table_NDS_Lidar = """
     CREATE TABLE "NDS".Lidar (
         LidarID SERIAL PRIMARY KEY,
         Model varchar(255),
@@ -131,8 +120,7 @@ create_table_Lidar = """
     );
 """
 
-# Tạo bảng Camera
-create_table_Camera = """
+create_table_NDS_Camera = """
     CREATE TABLE "NDS".Camera (
         CameraID SERIAL PRIMARY KEY,
         Model varchar(255),
@@ -141,8 +129,7 @@ create_table_Camera = """
     );
 """
 
-# Tạo bảng Radar
-create_table_Radar = """
+create_table_NDS_Radar = """
     CREATE TABLE "NDS".Radar (
         RadarID SERIAL PRIMARY KEY,
         Model varchar(255),
@@ -151,7 +138,7 @@ create_table_Radar = """
     );
 """
 
-create_table_SensorControlSystem = """
+create_table_NDS_SensorControlSystem = """
     CREATE TABLE "NDS".SensorControlSystem (
         ScsID SERIAL PRIMARY KEY,
         LidarID integer REFERENCES "NDS".Lidar(LidarID),
@@ -162,7 +149,7 @@ create_table_SensorControlSystem = """
     );
 """
 
-create_table_Robot = """
+create_table_NDS_Robot = """
     CREATE TABLE "NDS".Robot (
         RobotID SERIAL PRIMARY KEY,
         TypeRobot varchar(255),
@@ -173,7 +160,7 @@ create_table_Robot = """
     );
 """
 
-create_table_Energy = """
+create_table_NDS_Energy = """
     CREATE TABLE "NDS".Energy (
         EnergyID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES "NDS".Robot(RobotID),
@@ -184,7 +171,7 @@ create_table_Energy = """
     );
 """
 
-create_table_RobotTapping = """
+create_table_NDS_RobotTapping = """
     CREATE TABLE "NDS".RobotTapping (
         RobotTappingID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES "NDS".Robot(RobotID),
@@ -197,7 +184,7 @@ create_table_RobotTapping = """
     );
 """
 
-create_table_Blade = """
+create_table_NDS_Blade = """
     CREATE TABLE "NDS".Blade (
         BladeID SERIAL PRIMARY KEY,
         RobotTappingID integer REFERENCES "NDS".RobotTapping(RobotTappingID),
@@ -210,7 +197,7 @@ create_table_Blade = """
     );
 """
 
-create_table_Environment = """
+create_table_NDS_Environment = """
     CREATE TABLE "NDS".Environment (
         EnvironmentID SERIAL PRIMARY KEY,
         RobotTappingID integer REFERENCES "NDS".RobotTapping(RobotTappingID),
@@ -224,7 +211,7 @@ create_table_Environment = """
     );
 """
 
-create_table_Drone = """
+create_table_NDS_Drone = """
     CREATE TABLE "NDS".Drone (
         DroneID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES "NDS".Robot(RobotID),
@@ -234,7 +221,7 @@ create_table_Drone = """
     );
 """
 
-create_table_DroneInformation = """
+create_table_NDS_DroneInformation = """
     CREATE TABLE "NDS".DroneInformation (
         DroneInfoID SERIAL PRIMARY KEY,
         DroneID integer REFERENCES "NDS".Drone(DroneID),
@@ -247,7 +234,7 @@ create_table_DroneInformation = """
     );
 """
 
-create_table_DroneImage = """
+create_table_NDS_DroneImage = """
     CREATE TABLE "NDS".DroneImage (
         DroneImageID SERIAL PRIMARY KEY,
         DroneID integer REFERENCES "NDS".Drone(DroneID),
@@ -258,7 +245,7 @@ create_table_DroneImage = """
     );
 """
 
-create_table_ChargingStation = """
+create_table_NDS_ChargingStation = """
     CREATE TABLE "NDS".ChargingStation (
         ChargingStationID SERIAL PRIMARY KEY,
         Location point,
@@ -270,7 +257,7 @@ create_table_ChargingStation = """
     );
 """
 
-create_table_ChargingStatus = """
+create_table_NDS_ChargingStatus = """
     CREATE TABLE "NDS".ChargingStatus (
         ChargingStatusID SERIAL PRIMARY KEY,
         DroneID integer REFERENCES "NDS".Robot(RobotID),
@@ -282,7 +269,7 @@ create_table_ChargingStatus = """
     );
 """
 
-create_table_Task = """
+create_table_NDS_Task = """
     CREATE TABLE "NDS".Task (
         TaskID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES "NDS".Robot(RobotID),
