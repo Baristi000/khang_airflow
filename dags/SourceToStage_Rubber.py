@@ -6,12 +6,9 @@ import random
 import pandas as pd
 import json
 import pendulum
-from dags.sql.create_table import *
 from dags.sql.SourceToStage import *
-# import dags.create_table as qr
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-# from airflow.models.connection import Connection
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 default_args = {
@@ -31,12 +28,12 @@ sourceToStage_Country = PostgresOperator(
     sql= sourceToStage_Country,
     postgres_conn_id='pg_connection_1',
 )
-# setLset_Country = PostgresOperator(
-#     task_id='setLset_Country',
-#     sql = setLset_Country,
-#     postgres_conn_id='pg_connection_1',
-# )
-truncateTableAndSetCet_Country 
+setLset_Country = PostgresOperator(
+    task_id='setLset_Country',
+    sql = setLset_Country,
+    postgres_conn_id='pg_connection_1',
+)
+truncateTableAndSetCet_Country >> sourceToStage_Country
 
 # truncateTableAndSetCet_Region = PostgresOperator(
 #     task_id='truncateTableAndSetCet_Region',
