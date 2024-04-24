@@ -5,7 +5,7 @@ truncateTableAndSetCet_Country = '''
     set Cet = now() where Name = 'Country' 
 '''
 sourceToStage_Country = ''' 
-    DOsourceToStage_Country $$
+    DO $$
     DECLARE 
         Lset1 timestamp; 
         Cet1 timestamp;
