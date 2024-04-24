@@ -22,16 +22,19 @@ truncateTableAndSetCet_Country = PostgresOperator(
     task_id='truncateTableAndSetCet_Country',
     sql= truncateTableAndSetCet_Country,
     postgres_conn_id='pg_connection_1',
+    dag=dag
 ) 
 sourceToStage_Country = PostgresOperator(
     task_id='sourceToStage_Country',
     sql= sourceToStage_Country,
     postgres_conn_id='pg_connection_1',
+    dag=dag
 )
 setLset_Country = PostgresOperator(
     task_id='setLset_Country',
     sql = setLset_Country,
     postgres_conn_id='pg_connection_1',
+    dag=dag
 )
 truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
 
