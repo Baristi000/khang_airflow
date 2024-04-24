@@ -168,21 +168,9 @@ create_table_Task = PostgresOperator(
     dag=dag
 )
 
-# task_group_1 = {create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation}
-# task_group_2 = { create_table_Region, create_table_SensorControlSystem, create_table_ChargingStatus, create_table_Task, create_table_Energy}
-# # >> [ create_table_Address, create_table_Field, create_table_Drone] >> [ create_table_UserInfo, create_table_RubberTree, create_table_PlanDetail, create_table_DroneInformation]>> [ create_table_RubberTreeInformation, create_table_RobotTapping, create_table_DroneImage]>> [create_table_Blade, create_table_Environment]
-# task_group_1 >> task_group_2
-
-# task_group_1 = {create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation}
-# task_group_2 = { create_table_Region, create_table_SensorControlSystem, create_table_ChargingStatus, create_table_Task, create_table_Energy}
-# task_group_1 >> task_group_2
-# create_table_Country >> [create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation]
-
-
-from airflow.models.baseoperator import chain_linear
 # chain_linear([create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation], 
 #              [create_table_Region, create_table_SensorControlSystem, create_table_ChargingStatus, create_table_Task, create_table_Energy],
-#              [ create_table_Address, create_table_Field, create_table_Energy, create_table_Drone],
+#              [ create_table_Address, create_table_Field, create_table_Drone],
 #              [ create_table_UserInfo, create_table_RubberTree, create_table_PlanDetail, create_table_DroneInformation],
 #             [ create_table_RubberTreeInformation, create_table_RobotTapping, create_table_DroneImage],
 #               [create_table_Blade, create_table_Environment])
@@ -190,4 +178,5 @@ from airflow.models.baseoperator import chain_linear
 
 [create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot
 ] >> create_table_ChargingStation >> [create_table_Region, create_table_SensorControlSystem, create_table_ChargingStatus, create_table_Task
-] >> create_table_Energy >>[ create_table_Address, create_table_Field, create_table_Drone],
+] >> create_table_Energy >>[ create_table_Address, create_table_Field] >> create_table_Drone >> [ create_table_UserInfo, create_table_RubberTree, create_table_PlanDetail
+] >> create_table_DroneInformation >> [ create_table_RubberTreeInformation, create_table_RobotTapping] >> create_table_DroneImage >> [create_table_Blade, create_table_Environment]
