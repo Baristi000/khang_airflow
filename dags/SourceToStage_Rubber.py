@@ -26,18 +26,16 @@ truncateTableAndSetCet_Country = PostgresOperator(
     sql= truncateTableAndSetCet_Country,
     postgres_conn_id='pg_connection_1',
 )
-truncateTableAndSetCet_Country 
-
-# sourceToStage_Country = PostgresOperator(
-#     task_id='sourceToStage_Country',
-#     sql= sourceToStage_Country,
-#     postgres_conn_id='pg_connection_1',
-# )
-# setLset_Country = PostgresOperator(
-#     task_id='setLset_Country',
-#     sql = setLset_Country,
-#     postgres_conn_id='pg_connection_1',
-# )
+sourceToStage_Country = PostgresOperator(
+    task_id='sourceToStage_Country',
+    sql= sourceToStage_Country,
+    postgres_conn_id='pg_connection_1',
+)
+setLset_Country = PostgresOperator(
+    task_id='setLset_Country',
+    sql = setLset_Country,
+    postgres_conn_id='pg_connection_1',
+)
 
 # truncateTableAndSetCet_Region = PostgresOperator(
 #     task_id='truncateTableAndSetCet_Region',
@@ -423,7 +421,7 @@ truncateTableAndSetCet_Country
 #     postgres_conn_id='pg_connection_1',
 # )
 
-# truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
+truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
 # truncateTableAndSetCet_Region >> sourceToStage_Region >> setLset_Region
 # truncateTableAndSetCet_Address >> sourceToStage_Address >> setLset_Address
 # truncateTableAndSetCet_Account >> sourceToStage_Account >> setLset_Account
