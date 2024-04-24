@@ -176,7 +176,7 @@ create_table_Task = PostgresOperator(
 # task_group_1 = {create_table_Country, create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation}
 # task_group_2 = { create_table_Region, create_table_SensorControlSystem, create_table_ChargingStatus, create_table_Task, create_table_Energy}
 # task_group_1 >> task_group_2
-create_table_Country >> [create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation]
+# create_table_Country >> [create_table_Account, create_table_Plan, create_table_Lidar, create_table_Camera, create_table_Radar, create_table_Robot, create_table_ChargingStation]
 
 
 from airflow.models.baseoperator import chain_linear
