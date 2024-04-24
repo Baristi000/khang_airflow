@@ -15,6 +15,7 @@ default_args = {
     'start_date': pendulum.datetime(2024,4,24,tz='UTC'),
     'owner': 'airflow'
 }
+
 dag = DAG('Create_Table_Schema', default_args=default_args,schedule_interval='@once',catchup=False)
 
 create_table_Country = PostgresOperator(

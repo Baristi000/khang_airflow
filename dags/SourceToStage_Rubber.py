@@ -13,7 +13,7 @@ from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 default_args = {
     'start_date': pendulum.datetime(2024,4,24,tz='UTC'),
-    'owner': 'airflow'
+    'owner': 'airflow1'
 }
 dag = DAG('SourceToStage_Rubber', default_args=default_args,schedule_interval='@once',catchup=False)
 
@@ -33,7 +33,7 @@ setLset_Country = PostgresOperator(
     sql = setLset_Country,
     postgres_conn_id='pg_connection_1',
 )
-# truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
+truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
 
 # truncateTableAndSetCet_Region = PostgresOperator(
 #     task_id='truncateTableAndSetCet_Region',
