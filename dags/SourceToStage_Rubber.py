@@ -33,7 +33,7 @@ setLset_Country = PostgresOperator(
     sql = setLset_Country,
     postgres_conn_id='pg_connection_1',
 )
-truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
+# truncateTableAndSetCet_Country >> sourceToStage_Country >> setLset_Country
 
 # truncateTableAndSetCet_Region = PostgresOperator(
 #     task_id='truncateTableAndSetCet_Region',
