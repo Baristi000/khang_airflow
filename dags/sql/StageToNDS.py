@@ -373,7 +373,7 @@ StageToNDS_ChargingStatus = '''
     MERGE INTO "NDS".ChargingStatus AS t1
     USING (select * from "Stage".ChargingStatus 
 	    where ("Stage".ChargingStatus.DroneID in (select DroneID from "NDS".Drone))
-        and ("Stage".ChargingStatus.ChargingStationID in (select ChargingStationID from "NDS".RubberChargingStation)) ) AS t2
+        and ("Stage".ChargingStatus.ChargingStationID in (select ChargingStationID from "NDS".ChargingStation)) ) AS t2
     ON (t1.ChargingStatusID = t2.ChargingStatusID)
     WHEN MATCHED THEN
         UPDATE SET
