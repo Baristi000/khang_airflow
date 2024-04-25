@@ -170,7 +170,7 @@ StageToNDS_Task = PostgresOperator(
 
 [StageToNDS_Country, StageToNDS_Account, StageToNDS_Plan, StageToNDS_Lidar, StageToNDS_Camera, StageToNDS_Radar, StageToNDS_Robot
 ] >> StageToNDS_ChargingStation >> [StageToNDS_Region, StageToNDS_SensorControlSystem, StageToNDS_Task
-] >> StageToNDS_Energy >>[ StageToNDS_Address, StageToNDS_Field] >> StageToNDS_Drone >> [ StageToNDS_ChargingStatus, StageToNDS_UserInfo, 
+] >> StageToNDS_Energy >>[ StageToNDS_Address, StageToNDS_Field] >> StageToNDS_Drone >> [ StageToNDS_ChargingStatus , StageToNDS_UserInfo, 
 StageToNDS_RubberTree, StageToNDS_PlanDetail] >> StageToNDS_DroneInformation >> [ StageToNDS_RubberTreeInformation, StageToNDS_RobotTapping
 ] >> StageToNDS_DroneImage >> [StageToNDS_Blade, StageToNDS_Environment]
 
