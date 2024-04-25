@@ -174,6 +174,6 @@ create_table_NDS_Task = PostgresOperator(
 
 
 [create_table_NDS_Country, create_table_NDS_Account, create_table_NDS_Plan, create_table_NDS_Lidar, create_table_NDS_Camera, create_table_NDS_Radar, create_table_NDS_Robot
-] >> create_table_NDS_ChargingStation >> [create_table_NDS_Region, create_table_NDS_SensorControlSystem, create_table_NDS_ChargingStatus, create_table_NDS_Task
-] >> create_table_NDS_Energy >>[ create_table_NDS_Address, create_table_NDS_Field] >> create_table_NDS_Drone >> [ create_table_NDS_UserInfo, create_table_NDS_RubberTree, create_table_NDS_PlanDetail
+] >> create_table_NDS_ChargingStation >> [create_table_NDS_Region, create_table_NDS_SensorControlSystem, create_table_NDS_Task
+] >> create_table_NDS_Energy >>[ create_table_NDS_Address, create_table_NDS_Field] >> create_table_NDS_Drone >> [ create_table_NDS_ChargingStatus, create_table_NDS_UserInfo, create_table_NDS_RubberTree, create_table_NDS_PlanDetail
 ] >> create_table_NDS_DroneInformation >> [ create_table_NDS_RubberTreeInformation, create_table_NDS_RobotTapping] >> create_table_NDS_DroneImage >> [create_table_NDS_Blade, create_table_NDS_Environment]
