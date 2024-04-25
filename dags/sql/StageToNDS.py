@@ -112,7 +112,7 @@ StageToNDS_RubberTree = '''
 
 StageToNDS_RubberTreeInformation = ''' 
     MERGE INTO "NDS".RubberTreeInformation AS t1
-    USING (select * from "Stage".TreeInfo 
+    USING (select * from "Stage".RubberTreeInformation 
 	    where "Stage".RubberTreeInformation.TreeID in (select TreeID from "NDS".RubberTree)) AS t2
     ON (t1.TreeInfoID = t2.TreeInfoID)
     WHEN MATCHED THEN
