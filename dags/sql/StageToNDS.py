@@ -111,7 +111,7 @@ StageToNDS_RubberTree = '''
 '''
 
 StageToNDS_RubberTreeInformation = ''' 
-    MERGE INTO "NDS".TreeInfo AS t1
+    MERGE INTO "NDS".RubberTreeInformation AS t1
     USING (select * from "Stage".TreeInfo 
 	    where "Stage".TreeInfo.TreeID in (select TreeID from "NDS".RubberTree)) AS t2
     ON (t1.TreeInfoID = t2.TreeInfoID)
@@ -389,7 +389,6 @@ StageToNDS_ChargingStatus = '''
 
 StageToNDS_Task = ''' 
     MERGE INTO "NDS".Task AS t1
-    USING "Stage".Task AS t2
     USING (select * from "Stage".Task 
 	    where ("Stage".Task.RobotID in (select RobotID from "NDS".Robot))
         and ("Stage".Task.PlanID in (select PlanID from "NDS".RubberPlan)) ) AS t2

@@ -175,7 +175,7 @@ create_table_NDS_RobotTapping = """
     CREATE TABLE "NDS".RobotTapping (
         RobotTappingID SERIAL PRIMARY KEY,
         RobotID integer REFERENCES "NDS".Robot(RobotID),
-        TreeID integer references "NDS".RubberTree(TreeID),
+        TreeID integer REFERENCES "NDS".RubberTree(TreeID),
         Direction varchar(255),
         Speed numeric(100,2),
         Quantity numeric(100,2),
@@ -260,7 +260,7 @@ create_table_NDS_ChargingStation = """
 create_table_NDS_ChargingStatus = """
     CREATE TABLE "NDS".ChargingStatus (
         ChargingStatusID SERIAL PRIMARY KEY,
-        DroneID integer REFERENCES "NDS".Robot(RobotID),
+        DroneID integer REFERENCES "NDS".Drone(DroneID),
         ChargingStationID integer REFERENCES "NDS".ChargingStation(ChargingStationID),
         CurrentBattery Numeric(100,2),
         Status bool,
