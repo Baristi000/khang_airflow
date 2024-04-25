@@ -391,7 +391,7 @@ StageToNDS_Task = '''
     MERGE INTO "NDS".Task AS t1
     USING (select * from "Stage".Task 
 	    where ("Stage".Task.RobotID in (select RobotID from "NDS".Robot))
-        and ("Stage".Task.PlanID in (select PlanID from "NDS".RubberPlan)) ) AS t2
+        and ("Stage".Task.PlanID in (select PlanID from "NDS".Plan)) ) AS t2
     ON (t1.TaskID = t2.TaskID)
     WHEN MATCHED THEN
         UPDATE SET
